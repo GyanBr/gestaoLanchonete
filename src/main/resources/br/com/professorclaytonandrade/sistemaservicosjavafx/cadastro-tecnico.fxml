@@ -17,7 +17,7 @@
     <children>
         <VBox alignment="CENTER" prefHeight="341.0" prefWidth="500.0" spacing="10" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="10">
             <!-- Title Section -->
-            <Label text="Cadastro de Técnico" textAlignment="CENTER">
+            <Label text="Cadastro de Produto" textAlignment="CENTER">
                 <font>
                     <Font size="24" />
                 </font>
