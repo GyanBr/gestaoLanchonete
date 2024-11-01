@@ -1,6 +1,6 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.config.versoesbasedados;
 
-import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.ConexaoBanco;
+import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
 
 public class InicializadorBancoDados {
     private final Connection conexao; // Conexão com o banco de dados
+    // Caminho onde os arquivos de migração estão localizados
     private static final String CAMINHO_MIGRACOES = "sql/"; // Define o caminho das migrações
 
     public InicializadorBancoDados() throws SQLException {
         // Construtor que obtém a conexão com o banco de dados ao criar a instância
-        this.conexao = ConexaoBanco.obterConexao();
+        this.conexao = FabricaDeConexao.obterConexao();
     }
 
     public void inicializar() { // Método que inicia o processo de inicialização
@@ -47,15 +48,6 @@ public class InicializadorBancoDados {
             }
         } catch (SQLException | IOException e) {
             e.printStackTrace(); // Tratar exceções conforme necessário
-        } finally {
-            // Fecha a conexão ao final da inicialização
-            try {
-                if (conexao != null && !conexao.isClosed()) {
-                    conexao.close(); // Fecha a conexão
-                }
-            } catch (SQLException e) {
-                e.printStackTrace(); // Tratar exceções ao fechar a conexão
-            }
         }
     }
 

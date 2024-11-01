@@ -5,15 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
 import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Despesa; // Adjust the package path as needed
-import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.ConexaoBanco;
+import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
 
 
 public class DespesaDAO {
 
     public void registrarDespesa(Despesa despesa) {
         String sql = "INSERT INTO despesas (descricao, valor, data) VALUES (?, ?, ?)";
-        try (Connection conn = ConexaoBanco.obterConexao();
+        try (Connection conn = FabricaDeConexao.obterConexao();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, despesa.getDescricao());
             stmt.setBigDecimal(2, despesa.getValor());
