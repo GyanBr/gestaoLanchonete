@@ -8,8 +8,8 @@ module br.com.professorclaytonandrade.sistemaservicosjavafx {
 
     opens br.com.professorclaytonandrade.sistemaservicosjavafx to javafx.fxml;
     exports br.com.professorclaytonandrade.sistemaservicosjavafx;
-    exports br.com.professorclaytonandrade.sistemaservicosjavafx.dto;
+    //exports br.com.professorclaytonandrade.sistemaservicosjavafx.dto;
     opens br.com.professorclaytonandrade.sistemaservicosjavafx.controller to javafx.fxml;
-    opens br.com.professorclaytonandrade.sistemaservicosjavafx.dto to javafx.base;
+   // opens br.com.professorclaytonandrade.sistemaservicosjavafx.dto to javafx.base;
 
 }

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Ingrediente; // Adjust the package path as needed
+import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.ConexaoBanco;
 
 public class IngredienteDAO {
 
