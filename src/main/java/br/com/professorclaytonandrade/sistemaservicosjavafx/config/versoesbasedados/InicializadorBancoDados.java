@@ -16,99 +16,132 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class InicializadorBancoDados {
-    private final Connection conexao; // Connection to the database
-    private static final String CAMINHO_MIGRACOES = "sql/"; // Migration path
+    private final Connection conexao; // Conexão com o banco de dados
+    private static final String CAMINHO_MIGRACOES = "sql/"; // Define o caminho das migrações
 
     public InicializadorBancoDados() throws SQLException {
-        this.conexao = ConexaoBanco.obterConexao(); // Get database connection
+        // Construtor que obtém a conexão com o banco de dados ao criar a instância
+        this.conexao = ConexaoBanco.obterConexao();
     }
 
-    public void inicializar() {
+    public void inicializar() { // Método que inicia o processo de inicialização
         try {
-            criarSchemaVersaoTabela(); // Ensure version control table exists
-            List<Path> arquivosMigracao = listarArquivosDeMigracao(); // Get migration files
+            // Garante que a tabela de controle de versão existe
+            criarSchemaVersaoTabela();
 
+            // Lista e aplica os arquivos de migração
+            List<Path> arquivosMigracao = listarArquivosDeMigracao(); // Obtém a lista de arquivos de migração
+
+            // Percorre cada arquivo de migração
             for (Path caminho : arquivosMigracao) {
-                int idVersao = extrairVersaoDoArquivo(caminho.getFileName().toString()); // Extract version ID
+                // Extrai o número da versão a partir do nome do arquivo
+                int idVersao = extrairVersaoDoArquivo(caminho.getFileName().toString());
+
+                // Verifica se a migração já foi aplicada
                 if (!isMigracaoAplicada(idVersao)) {
-                    String sql = lerArquivoSql(caminho); // Read SQL from file
-                    aplicarMigracao(idVersao, caminho.getFileName().toString(), sql); // Apply migration
+                    // Lê o conteúdo do arquivo SQL
+                    String sql = lerArquivoSql(caminho);
+                    // Aplica a migração no banco de dados
+                    aplicarMigracao(idVersao, caminho.getFileName().toString(), sql);
                 }
             }
         } catch (SQLException | IOException e) {
-            e.printStackTrace(); // Better logging could be implemented here
+            e.printStackTrace(); // Tratar exceções conforme necessário
+        } finally {
+            // Fecha a conexão ao final da inicialização
+            try {
+                if (conexao != null && !conexao.isClosed()) {
+                    conexao.close(); // Fecha a conexão
+                }
+            } catch (SQLException e) {
+                e.printStackTrace(); // Tratar exceções ao fechar a conexão
+            }
         }
     }
 
     private List<Path> listarArquivosDeMigracao() throws IOException {
         try {
+            // Obtém a URL da pasta de migrações
             URI uriMigracoes = getClass().getClassLoader().getResource(CAMINHO_MIGRACOES).toURI();
+            // Converte a URL para um objeto Path
             Path diretorioMigracoes = Paths.get(uriMigracoes);
 
+            // Lista os arquivos no diretório de migrações
             return Files.list(diretorioMigracoes)
-                    .filter(Files::isRegularFile)
-                    .sorted()
-                    .collect(Collectors.toList());
+                    .filter(Files::isRegularFile) // Filtra para obter apenas arquivos regulares
+                    .sorted() // Ordena para garantir que as migrações sejam aplicadas na ordem correta
+                    .collect(Collectors.toList()); // Coleta os resultados em uma lista
         } catch (URISyntaxException e) {
             throw new IOException("Erro ao acessar a pasta de migrações", e);
         } catch (NullPointerException e) {
-            throw new IOException("Pasta de migrações não encontrada: " + CAMINHO_MIGRACOES);
+            throw new IOException("Pasta de migrações não encontrada: " + CAMINHO_MIGRACOES); // Mensagem de erro caso a pasta não exista
         }
     }
 
     private String lerArquivoSql(Path caminhoArquivo) throws IOException, SQLException {
+        // Cria um StringBuilder para armazenar o conteúdo do arquivo SQL
         StringBuilder sqlBuilder = new StringBuilder();
+        // Lê o conteúdo do arquivo SQL linha por linha
         try (BufferedReader leitor = Files.newBufferedReader(caminhoArquivo)) {
             String linha;
-            while ((linha = leitor.readLine()) != null) {
-                sqlBuilder.append(linha).append("\n");
+            while ((linha = leitor.readLine()) != null) { // Continua lendo enquanto houver linhas
+                sqlBuilder.append(linha).append("\n"); // Adiciona a linha ao StringBuilder
             }
         }
-        String sql = sqlBuilder.toString().trim();
+        String sql = sqlBuilder.toString().trim(); // Remove espaços em branco do início e fim
+
+        // Verifica se a string SQL não está vazia
         if (sql.isEmpty()) {
-            throw new SQLException("A string SQL não pode estar vazia: " + caminhoArquivo.toString());
+            throw new SQLException("A string SQL não pode estar vazia: " + caminhoArquivo.toString()); // Mensagem de erro se estiver vazia
         }
-        return sql;
+        return sql; // Retorna o conteúdo SQL lido
     }
 
     private void aplicarMigracao(int idVersao, String descricao, String sql) throws SQLException {
+        // Prepara a declaração SQL para a execução da migração
         try (PreparedStatement declaracao = conexao.prepareStatement(sql)) {
-            declaracao.executeUpdate();
-            registrarMigracao(idVersao, descricao); // Register applied migration
+            declaracao.executeUpdate(); // Executa a atualização no banco de dados
+            // Registra a migração aplicada no controle de versão
+            registrarMigracao(idVersao, descricao);
         }
     }
 
     private void registrarMigracao(int idVersao, String descricao) throws SQLException {
+        // SQL para registrar a migração na tabela de controle de versão
         String sql = "INSERT INTO schema_version (version_id, description) VALUES (?, ?)";
         try (PreparedStatement declaracao = conexao.prepareStatement(sql)) {
-            declaracao.setInt(1, idVersao);
-            declaracao.setString(2, descricao);
-            declaracao.executeUpdate();
+            declaracao.setInt(1, idVersao); // Define o ID da versão
+            declaracao.setString(2, descricao); // Define a descrição da migração
+            declaracao.executeUpdate(); // Executa a inserção na tabela
         }
     }
 
     private boolean isMigracaoAplicada(int idVersao) throws SQLException {
+        // SQL para verificar se a migração foi aplicada
         String sql = "SELECT COUNT(*) FROM schema_version WHERE version_id = ?";
         try (PreparedStatement declaracao = conexao.prepareStatement(sql)) {
-            declaracao.setInt(1, idVersao);
-            var resultSet = declaracao.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1) > 0; // Check if migration was applied
+            declaracao.setInt(1, idVersao); // Define o ID da versão
+            var resultSet = declaracao.executeQuery(); // Executa a consulta
+            resultSet.next(); // Move para o próximo registro
+            // Retorna true se a migração foi aplicada (contagem maior que 0)
+            return resultSet.getInt(1) > 0;
         }
     }
 
     private void criarSchemaVersaoTabela() throws SQLException {
+        // SQL para criar a tabela de controle de versão, se não existir
         String sql = "CREATE TABLE IF NOT EXISTS schema_version (" +
                 "version_id INT PRIMARY KEY, " +
                 "description VARCHAR(255), " +
                 "applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
         try (PreparedStatement declaracao = conexao.prepareStatement(sql)) {
-            declaracao.executeUpdate();
+            declaracao.executeUpdate(); // Executa a criação da tabela
         }
     }
 
     private int extrairVersaoDoArquivo(String arquivo) {
-        String parteVersao = arquivo.split("__")[0].substring(1); // Extract version number
-        return Integer.parseInt(parteVersao);
+        // Extrai o número da versão a partir do nome do arquivo (ex: V1__descricao.sql -> 1)
+        String parteVersao = arquivo.split("__")[0].substring(1); // Remove o 'V' e pega o número
+        return Integer.parseInt(parteVersao); // Retorna o número da versão como um inteiro
     }
 }
