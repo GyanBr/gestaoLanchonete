@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+
 <AnchorPane prefHeight="372.0" prefWidth="519.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.CadastroTecnicoController">
     <children>
         <VBox alignment="CENTER" prefHeight="341.0" prefWidth="500.0" spacing="10" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="10">
