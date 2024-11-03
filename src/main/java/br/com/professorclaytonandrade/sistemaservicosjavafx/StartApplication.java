@@ -16,7 +16,7 @@ public class StartApplication extends Application {
         Parent parent = FXMLLoader.load(StartApplication.class.getResource("start-view.fxml"));
         Scene scene = new Scene(parent);
         stage.setMaximized(true);
-        stage.setTitle("Sistema de Serviços JavaFX");
+        stage.setTitle("Sistema de Gerenciamento");
         stage.setScene(scene);
         stage.show();
     }
