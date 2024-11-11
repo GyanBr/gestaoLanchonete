@@ -1,41 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefHeight="740.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.StartViewController">
-   <children>
-      <MenuBar minHeight="35.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="Cadastro">
-            <items>
-              <MenuItem fx:id="menuItemCadastroTecnico" mnemonicParsing="false" onAction="#mostrarCadastroTecnico" text="Cadastro Técnico" />
-                  <MenuItem fx:id="menuItemCadastroCliente" mnemonicParsing="false" text="Cadastro Cliente" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Consulta">
-               <items>
-                  <MenuItem fx:id="menuItemCadastroTecnico1" mnemonicParsing="false" onAction="#mostrarConsultaTecnico" text="Consulta Técnico" />
-                  <MenuItem fx:id="menuItemCadastroCliente1" mnemonicParsing="false" text="Consulta Cliente" />
-               </items>
-            </Menu>
-          <Menu mnemonicParsing="false" text="Ordem Serviço">
-            <items>
-              <MenuItem fx:id="menuItemNovoChamado" mnemonicParsing="false" text="Novo Chamado" />
-            </items>
-          </Menu>
-        </menus>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="5.0" top="5.0" />
-         </padding>
-      </MenuBar>
-      <AnchorPane fx:id="anchorPane" prefHeight="722.0" prefWidth="1025.0" />
-   </children>
-</VBox>
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.StartViewController">
+    <children>
+        <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+            <Text styleClass="title" text="Sistema de Gestão"
+                  style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-fill: #2c3e50;"/>
+
+            <VBox spacing="15.0" alignment="CENTER">
+                <GridPane alignment="CENTER" hgap="20.0" vgap="20.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="200.0"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="200.0"/>
+                    </columnConstraints>
+
+                    <Button fx:id="produtosButton" onAction="#handleProdutos"
+                            prefWidth="200.0" prefHeight="100.0"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px;"
+                            text="Produtos"
+                            GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="10.0">
+                                <Label text="📦" style="-fx-font-size: 24px;"/>
+                                <Label text="Gerenciar Produtos" style="-fx-text-fill: white;"/>
+                            </VBox>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="ingredientesButton" onAction="#handleIngredientes"
+                            prefWidth="200.0" prefHeight="100.0"
+                            style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 16px;"
+                            text="Ingredientes"
+                            GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="10.0">
+                                <Label text="🥗" style="-fx-font-size: 24px;"/>
+                                <Label text="Gerenciar Ingredientes" style="-fx-text-fill: white;"/>
+                            </VBox>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="vendasButton" onAction="#handleVendas"
+                            prefWidth="200.0" prefHeight="100.0"
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 16px;"
+                            text="Vendas"
+                            GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="10.0">
+                                <Label text="💰" style="-fx-font-size: 24px;"/>
+                                <Label text="Registrar Vendas" style="-fx-text-fill: white;"/>
+                            </VBox>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="despesasButton" onAction="#handleDespesas"
+                            prefWidth="200.0" prefHeight="100.0"
+                            style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 16px;"
+                            text="Despesas"
+                            GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="10.0">
+                                <Label text="📊" style="-fx-font-size: 24px;"/>
+                                <Label text="Controlar Despesas" style="-fx-text-fill: white;"/>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </GridPane>
+            </VBox>
+
+            <Label text="© 2024 Sistema de Gestão"
+                   style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;">
+                <VBox.margin>
+                    <Insets top="30.0"/>
+                </VBox.margin>
+            </Label>
+        </VBox>
+    </children>
+</AnchorPane>
