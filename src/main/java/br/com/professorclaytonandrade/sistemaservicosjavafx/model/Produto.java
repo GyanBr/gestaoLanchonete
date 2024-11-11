@@ -11,7 +11,7 @@ public class Produto {
     private int quantidadeEstoque;
 
     // Constructor
-    public Produto(int id, String descricao, BigDecimal preco, BigDecimal markup, int quantidadeEstoque) {
+    public Produto() {
         this.id = id;
         this.descricao = descricao;
         this.preco = preco;

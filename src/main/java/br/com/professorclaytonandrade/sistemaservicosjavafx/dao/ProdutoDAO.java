@@ -1,7 +1,6 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.dao;
 
 import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
-import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
 import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Produto;
 
 import java.sql.Connection;
@@ -42,7 +41,7 @@ public class ProdutoDAO {
                 BigDecimal preco = rs.getBigDecimal("preco");
                 BigDecimal markup = rs.getBigDecimal("markup"); // Retrieve the markup from the database
                 int quantidadeEstoque = rs.getInt("quantidade_estoque");
-                produtos.add(new Produto(id, descricao, preco, markup, quantidadeEstoque));
+                produtos.add(new Produto());
             }
         } catch (SQLException e) {
             e.printStackTrace();

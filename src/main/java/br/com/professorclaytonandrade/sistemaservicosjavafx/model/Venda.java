@@ -11,7 +11,7 @@ public class Venda {
     private BigDecimal precoTotal;
 
     // Construtor
-    public Venda(Produto produto, int quantidade) {
+    public Venda() {
         this.produto = produto;
         this.quantidade = quantidade;
         this.precoTotal = produto.getPrecoVenda().multiply(new BigDecimal(quantidade));

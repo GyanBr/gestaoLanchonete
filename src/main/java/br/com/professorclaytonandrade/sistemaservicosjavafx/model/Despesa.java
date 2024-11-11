@@ -1,5 +1,7 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.model;
 
+import javafx.beans.value.ObservableValue;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -10,7 +12,7 @@ public class Despesa {
     private LocalDate data;
 
     // Construtor
-    public Despesa(String descricao, BigDecimal valor) {
+    public Despesa() {
         this.descricao = descricao;
         this.valor = valor;
         this.data = LocalDate.now();
