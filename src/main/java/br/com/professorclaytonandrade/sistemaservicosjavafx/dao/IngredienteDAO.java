@@ -14,16 +14,7 @@ import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.Fabri
 public class IngredienteDAO {
 
     public void adicionarIngrediente(Ingrediente ingrediente) {
-        String sql = "INSERT INTO ingredientes (nome, preco, unidade_medida) VALUES (?, ?, ?)";
-        try (Connection conn = FabricaDeConexao.obterConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, ingrediente.getNome());
-            stmt.setBigDecimal(2, ingrediente.getPreco());
-            stmt.setString(3, ingrediente.getUnidadeMedida());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public List<Ingrediente> listarIngredientes() {
@@ -45,5 +36,8 @@ public class IngredienteDAO {
             e.printStackTrace();
         }
         return ingredientes;
+    }
+
+    public void salvar(Ingrediente ingrediente) {
     }
 }

@@ -33,7 +33,7 @@ public class StartViewController {
     private void abrirJanela(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/caminho/do/arquivo.fxml"));
 
             Stage stage = new Stage();
             stage.setTitle(title);
