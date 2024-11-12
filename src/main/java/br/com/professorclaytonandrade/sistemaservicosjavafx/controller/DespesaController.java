@@ -1,120 +1,77 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.controller;
 
-import br.com.professorclaytonandrade.sistemaservicosjavafx.dao.DespesaDAO;
-import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Despesa;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+
 import java.time.LocalDate;
-import java.math.BigDecimal;
 
 public class DespesaController {
-    @FXML private TextArea descricaoTextArea;
-    @FXML private TextField valorTextField;
-    @FXML private DatePicker dataPicker;
-    @FXML private TableView<Despesa> despesasTableView;
-    @FXML private TableColumn<Despesa, LocalDate> dataColumn;
-    @FXML private TableColumn<Despesa, String> descricaoColumn;
-    @FXML private TableColumn<Despesa, BigDecimal> valorColumn;
 
-    private DespesaDAO despesaDAO = new DespesaDAO();
-    private ObservableList<Despesa> despesas = FXCollections.observableArrayList();
+    @FXML
+    private TextField descricaoField;
+
+    @FXML
+    private TextField valorField;
+
+    @FXML
+    private DatePicker dataDespesaPicker;
+
+    @FXML
+    private Button registrarButton;
 
     @FXML
     public void initialize() {
-        dataPicker.setValue(LocalDate.now());
-        configurarTabela();
-        carregarDespesas();
+        registrarButton.setOnAction(event -> registrarDespesa());
     }
 
-    private void configurarTabela() {
-        dataColumn.setCellValueFactory(cellData -> cellData.getValue().dataProperty());
-        descricaoColumn.setCellValueFactory(cellData -> cellData.getValue().descricaoProperty());
-        valorColumn.setCellValueFactory(cellData -> cellData.getValue().valorProperty());
+    private void registrarDespesa() {
+        if (validarCampos()) {
+            String descricao = descricaoField.getText();
+            double valor = Double.parseDouble(valorField.getText());
+            LocalDate data = dataDespesaPicker.getValue();
 
-        // Formatador para valores monetários
-        valorColumn.setCellFactory(tc -> new TableCell<>() {
-            @Override
-            protected void updateItem(BigDecimal value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty || value == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("R$ %.2f", value));
-                }
-            }
-        });
-    }
+            // Aqui, pode-se adicionar a lógica de salvar no banco de dados ou registrar em uma lista
 
-    private void carregarDespesas() {
-        // Aqui você deve carregar as despesas do banco de dados
-        // despesas.addAll(despesaDAO.listarDespesas());
-        despesasTableView.setItems(despesas);
-    }
-
-    @FXML
-    private void handleSalvar() {
-        try {
-            if (!validarCampos()) {
-                return;
-            }
-
-            Despesa despesa = new Despesa();
-            despesa.setDescricao(descricaoTextArea.getText());
-            despesa.setValor(new BigDecimal(valorTextField.getText().replace(",", ".")));
-            despesa.setData(dataPicker.getValue());
-
-            despesaDAO.registrarDespesa(despesa);
-
-            despesas.add(despesa);
+            exibirMensagem("Registro de Despesa", "Despesa registrada com sucesso!");
             limparCampos();
-            mostrarAlerta("Sucesso", "Despesa registrada com sucesso!");
-        } catch (Exception e) {
-            mostrarErro("Erro ao registrar despesa", e.getMessage());
         }
     }
 
     private boolean validarCampos() {
-        if (descricaoTextArea.getText().trim().isEmpty()) {
-            mostrarErro("Erro de validação", "A descrição é obrigatória.");
+        if (descricaoField.getText().isEmpty() || valorField.getText().isEmpty() || dataDespesaPicker.getValue() == null) {
+            exibirMensagemErro("Todos os campos devem ser preenchidos.");
             return false;
         }
         try {
-            new BigDecimal(valorTextField.getText().replace(",", "."));
+            Double.parseDouble(valorField.getText());
         } catch (NumberFormatException e) {
-            mostrarErro("Erro de validação", "Valor inválido.");
-            return false;
-        }
-        if (dataPicker.getValue() == null) {
-            mostrarErro("Erro de validação", "A data é obrigatória.");
+            exibirMensagemErro("O campo valor deve ser numérico.");
             return false;
         }
         return true;
     }
 
-    @FXML
-    private void handleLimpar() {
-        limparCampos();
-    }
-
     private void limparCampos() {
-        descricaoTextArea.clear();
-        valorTextField.clear();
-        dataPicker.setValue(LocalDate.now());
+        descricaoField.clear();
+        valorField.clear();
+        dataDespesaPicker.setValue(null);
     }
 
-    private void mostrarAlerta(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void exibirMensagem(String titulo, String mensagem) {
+        Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
     }
 
-    private void mostrarErro(String titulo, String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titulo);
+    private void exibirMensagemErro(String mensagem) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erro");
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();

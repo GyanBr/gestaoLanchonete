@@ -11,11 +11,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.IngredienteController">
     <children>
-        <VBox layoutX="14.0" layoutY="14.0" prefHeight="472.0" prefWidth="572.0">
+        <VBox layoutX="14.0" layoutY="14.0" prefHeight="472.0" prefWidth="572.0" spacing="10.0">
             <children>
                 <Label text="Cadastro de Ingredientes" style="-fx-font-size: 18px; -fx-font-weight: bold">
                     <VBox.margin>
@@ -42,13 +41,13 @@
                         <Insets top="10.0" bottom="10.0" />
                     </VBox.margin>
                     <children>
-                        <Button fx:id="limparButton" text="Limpar" />
-                        <Button fx:id="salvarButton" text="Salvar" />
-                        <Button fx:id="excluirButton" text="Excluir" />
+                        <Button fx:id="limparButton" text="Limpar" onAction="#handleLimpar" />
+                        <Button fx:id="salvarButton" text="Salvar" onAction="#handleSalvar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+                        <Button fx:id="excluirButton" text="Excluir" onAction="#handleExcluir" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
                     </children>
                 </HBox>
 
-                <TableView fx:id="ingredientesTableView" prefHeight="200.0" prefWidth="200.0">
+                <TableView fx:id="ingredientesTableView" prefHeight="200.0" prefWidth="572.0">
                     <columns>
                         <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
                         <TableColumn fx:id="nomeColumn" prefWidth="150.0" text="Nome" />

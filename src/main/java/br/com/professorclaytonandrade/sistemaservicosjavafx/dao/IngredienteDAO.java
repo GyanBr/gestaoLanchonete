@@ -1,43 +1,60 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Ingrediente;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
-import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Ingrediente; // Adjust the package path as needed
-import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
-
 public class IngredienteDAO {
 
-    public void adicionarIngrediente(Ingrediente ingrediente) {
+    private Connection connection;
 
+    public IngredienteDAO(Connection connection) {
+        this.connection = connection;
     }
 
-    public List<Ingrediente> listarIngredientes() {
+    public void inserir(Ingrediente ingrediente) throws SQLException {
+        String sql = "INSERT INTO ingrediente (nome, quantidade) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ingrediente.getNome());
+            stmt.setDouble(2, ingrediente.getQuantidade());
+            stmt.executeUpdate();
+        }
+    }
+
+    public List<Ingrediente> listarTodos() throws SQLException {
         List<Ingrediente> ingredientes = new ArrayList<>();
-        String sql = "SELECT * FROM ingredientes";
-        try (Connection conn = FabricaDeConexao.obterConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        String sql = "SELECT * FROM ingrediente";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Ingrediente ingrediente = new Ingrediente(
+                        rs.getInt("id"),
                         rs.getString("nome"),
-                        rs.getBigDecimal("preco"),
-                        rs.getString("unidade_medida")
+                        rs.getDouble("quantidade")
                 );
-                ingrediente.setId(rs.getInt("id"));
                 ingredientes.add(ingrediente);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return ingredientes;
     }
 
-    public void salvar(Ingrediente ingrediente) {
+    public void atualizar(Ingrediente ingrediente) throws SQLException {
+        String sql = "UPDATE ingrediente SET nome = ?, quantidade = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ingrediente.getNome());
+            stmt.setDouble(2, ingrediente.getQuantidade());
+            stmt.setInt(3, ingrediente.getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void deletar(int id) throws SQLException {
+        String sql = "DELETE FROM ingrediente WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
     }
 }

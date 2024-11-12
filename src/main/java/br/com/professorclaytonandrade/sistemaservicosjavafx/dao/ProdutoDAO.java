@@ -1,53 +1,60 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.dao;
 
-import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
 import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Produto;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
 
 public class ProdutoDAO {
 
-    // Method to register a product
-    public void registrarProduto(Produto produto) {
-        String sql = "INSERT INTO produtos (descricao, preco, quantidade_estoque, markup) VALUES (?, ?, ?, ?)";
-        try (Connection conn = FabricaDeConexao.obterConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, produto.getDescricao());
-            stmt.setBigDecimal(2, produto.getPreco());
-            stmt.setInt(3, produto.getQuantidadeEstoque());
-            stmt.setBigDecimal(4, produto.getMarkup()); // Ensure this is set as well
+    private Connection connection;
+
+    public ProdutoDAO(Connection connection) {
+        this.connection = connection;
+    }
+
+    public void inserir(Produto produto) throws SQLException {
+        String sql = "INSERT INTO produto (nome, preco) VALUES (?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, produto.getNome());
+            stmt.setDouble(2, produto.getPreco());
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    // Method to retrieve all products
-    public List<Produto> listarProdutos() {
+    public List<Produto> listarTodos() throws SQLException {
         List<Produto> produtos = new ArrayList<>();
-        String sql = "SELECT * FROM produtos"; // Ensure the markup column exists in the database
-        try (Connection conn = FabricaDeConexao.obterConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        String sql = "SELECT * FROM produto";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String descricao = rs.getString("descricao");
-                BigDecimal preco = rs.getBigDecimal("preco");
-                BigDecimal markup = rs.getBigDecimal("markup"); // Retrieve the markup from the database
-                int quantidadeEstoque = rs.getInt("quantidade_estoque");
-                produtos.add(new Produto());
+                Produto produto = new Produto(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getDouble("preco")
+                );
+                produtos.add(produto);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return produtos;
     }
 
-    // Additional methods for updating and deleting products can be added here
+    public void atualizar(Produto produto) throws SQLException {
+        String sql = "UPDATE produto SET nome = ?, preco = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, produto.getNome());
+            stmt.setDouble(2, produto.getPreco());
+            stmt.setInt(3, produto.getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void deletar(int id) throws SQLException {
+        String sql = "DELETE FROM produto WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
 }

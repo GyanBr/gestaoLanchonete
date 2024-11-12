@@ -10,13 +10,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.ProdutoController">
     <children>
         <VBox layoutX="14.0" layoutY="14.0" prefHeight="572.0" prefWidth="772.0" spacing="10.0">
             <children>
-                <Label styleClass="title-label" text="Gerenciamento de Produtos">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gerenciamento de Produtos">
                     <VBox.margin>
                         <Insets bottom="10.0" />
                     </VBox.margin>
@@ -50,11 +49,11 @@
                     </children>
                 </HBox>
 
-                <HBox spacing="10.0">
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
                     <children>
-                        <Button fx:id="salvarButton" mnemonicParsing="false" text="Salvar" />
-                        <Button fx:id="limparButton" mnemonicParsing="false" text="Limpar" />
-                        <Button fx:id="excluirButton" mnemonicParsing="false" text="Excluir" />
+                        <Button fx:id="salvarButton" text="Salvar" onAction="#handleSalvar" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                        <Button fx:id="limparButton" text="Limpar" onAction="#handleLimpar" />
+                        <Button fx:id="excluirButton" text="Excluir" onAction="#handleExcluir" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
                     </children>
                     <VBox.margin>
                         <Insets top="10.0" bottom="10.0" />
