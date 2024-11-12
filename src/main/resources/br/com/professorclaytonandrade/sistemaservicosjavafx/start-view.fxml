@@ -10,7 +10,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.StartViewController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="br.com.professorclaytonandrade.sistemaservicosjavafx.controller.StartViewController">
     <children>
         <VBox alignment="CENTER" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
@@ -27,41 +28,43 @@
                         <RowConstraints />
                     </rowConstraints>
 
-                    <Button fx:id="produtosButton" onAction="#handleProdutos" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <graphic>
-                            <VBox alignment="CENTER" spacing="10.0">
-                                <Label style="-fx-font-size: 24px;" text="📦" />
-                                <Label style="-fx-text-fill: white;" text="Gerenciar Produtos" />
-                            </VBox>
-                        </graphic>
-                    </Button>
+                    <children>
+                        <Button fx:id="produtosButton" onAction="#handleProdutos" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="10.0">
+                                    <Label style="-fx-font-size: 24px;" text="📦" />
+                                    <Label style="-fx-text-fill: white;" text="Gerenciar Produtos" />
+                                </VBox>
+                            </graphic>
+                        </Button>
 
-                    <Button fx:id="ingredientesButton" onAction="#handleIngredientes" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <graphic>
-                            <VBox alignment="CENTER" spacing="10.0">
-                                <Label style="-fx-font-size: 24px;" text="🥗" />
-                                <Label style="-fx-text-fill: white;" text="Gerenciar Ingredientes" />
-                            </VBox>
-                        </graphic>
-                    </Button>
+                        <Button fx:id="ingredientesButton" onAction="#handleIngredientes" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="10.0">
+                                    <Label style="-fx-font-size: 24px;" text="🥗" />
+                                    <Label style="-fx-text-fill: white;" text="Gerenciar Ingredientes" />
+                                </VBox>
+                            </graphic>
+                        </Button>
 
-                    <Button fx:id="vendasButton" onAction="#handleVendas" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                        <graphic>
-                            <VBox alignment="CENTER" spacing="10.0">
-                                <Label style="-fx-font-size: 24px;" text="💰" />
-                                <Label style="-fx-text-fill: white;" text="Registrar Vendas" />
-                            </VBox>
-                        </graphic>
-                    </Button>
+                        <Button fx:id="vendasButton" onAction="#handleVendas" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="10.0">
+                                    <Label style="-fx-font-size: 24px;" text="💰" />
+                                    <Label style="-fx-text-fill: white;" text="Registrar Vendas" />
+                                </VBox>
+                            </graphic>
+                        </Button>
 
-                    <Button fx:id="despesasButton" onAction="#handleDespesas" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <graphic>
-                            <VBox alignment="CENTER" spacing="10.0">
-                                <Label style="-fx-font-size: 24px;" text="📊" />
-                                <Label style="-fx-text-fill: white;" text="Controlar Despesas" />
-                            </VBox>
-                        </graphic>
-                    </Button>
+                        <Button fx:id="despesasButton" onAction="#handleDespesas" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-size: 16px;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="10.0">
+                                    <Label style="-fx-font-size: 24px;" text="📊" />
+                                    <Label style="-fx-text-fill: white;" text="Controlar Despesas" />
+                                </VBox>
+                            </graphic>
+                        </Button>
+                    </children>
                 </GridPane>
             </VBox>
 
