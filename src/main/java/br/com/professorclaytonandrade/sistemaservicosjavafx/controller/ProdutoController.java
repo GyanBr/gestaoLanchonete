@@ -1,71 +1,92 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.event.ActionEvent;
 
 public class ProdutoController {
 
     @FXML
-    private TextField nomeProdutoField;
+    private Label tituloLabel;
+
+    @FXML
+    private Label descricaoLabel;
+
+    @FXML
+    private Label precoLabel;
+
+    @FXML
+    private Label quantidadeLabel;
+
+    @FXML
+    private Label markupLabel;
+
+    @FXML
+    private TextField descricaoField;
 
     @FXML
     private TextField precoField;
 
     @FXML
-    private Button cadastrarButton;
+    private TextField quantidadeField;
+
+    @FXML
+    private TextField markupField;
+
+    @FXML
+    private Button salvarButton;
+
+    @FXML
+    private Button limparButton;
+
+    @FXML
+    private Button excluirButton;
+
+    @FXML
+    private TableView<?> produtosTable;
+
+    @FXML
+    private TableColumn<?, ?> idColumn;
+
+    @FXML
+    private TableColumn<?, ?> descricaoColumn;
+
+    @FXML
+    private TableColumn<?, ?> precoColumn;
+
+    @FXML
+    private TableColumn<?, ?> quantidadeColumn;
+
+    @FXML
+    private TableColumn<?, ?> markupColumn;
 
     @FXML
     public void initialize() {
-        cadastrarButton.setOnAction(event -> cadastrarProduto());
+        // Código de inicialização, como vinculação de colunas da tabela
     }
 
-    private void cadastrarProduto() {
-        if (validarCampos()) {
-            String nomeProduto = nomeProdutoField.getText();
-            double preco = Double.parseDouble(precoField.getText());
-
-            // Lógica para cadastrar o produto
-
-            exibirMensagem("Cadastro de Produto", "Produto cadastrado com sucesso!");
-            limparCampos();
-        }
+    @FXML
+    private void handleSalvar(ActionEvent event) {
+        // Lógica para salvar o produto
+        // Exemplo: validar entrada, criar um novo objeto Produto, salvar no banco ou lista
     }
 
-    private boolean validarCampos() {
-        if (nomeProdutoField.getText().isEmpty() || precoField.getText().isEmpty()) {
-            exibirMensagemErro("Todos os campos devem ser preenchidos.");
-            return false;
-        }
-        try {
-            Double.parseDouble(precoField.getText());
-        } catch (NumberFormatException e) {
-            exibirMensagemErro("O campo preço deve ser numérico.");
-            return false;
-        }
-        return true;
-    }
-
-    private void limparCampos() {
-        nomeProdutoField.clear();
+    @FXML
+    private void handleLimpar(ActionEvent event) {
+        // Lógica para limpar os campos de entrada
+        descricaoField.clear();
         precoField.clear();
+        quantidadeField.clear();
+        markupField.clear();
     }
 
-    private void exibirMensagem(String titulo, String mensagem) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
-
-    private void exibirMensagemErro(String mensagem) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
+    @FXML
+    private void handleExcluir(ActionEvent event) {
+        // Lógica para excluir o produto selecionado na tabela
+        // Exemplo: verificar seleção e remover da lista ou banco de dados
     }
 }

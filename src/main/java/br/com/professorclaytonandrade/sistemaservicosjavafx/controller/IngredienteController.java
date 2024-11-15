@@ -1,71 +1,94 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.event.ActionEvent;
 
 public class IngredienteController {
 
     @FXML
-    private TextField nomeIngredienteField;
+    private Label tituloLabel;
 
     @FXML
-    private TextField quantidadeField;
+    private Label nomeLabel;
 
     @FXML
-    private Button cadastrarButton;
+    private Label precoLabel;
+
+    @FXML
+    private Label quantidadeLabel;
+
+    @FXML
+    private Label unidadeLabel;
+
+    @FXML
+    private TextField nomeTextField;
+
+    @FXML
+    private TextField precoTextField;
+
+    @FXML
+    private TextField quantidadeTextField;
+
+    @FXML
+    private ComboBox<String> unidadeMedidaComboBox;
+
+    @FXML
+    private Button limparButton;
+
+    @FXML
+    private Button salvarButton;
+
+    @FXML
+    private Button excluirButton;
+
+    @FXML
+    private TableView<?> ingredientesTableView;
+
+    @FXML
+    private TableColumn<?, ?> idColumn;
+
+    @FXML
+    private TableColumn<?, ?> nomeColumn;
+
+    @FXML
+    private TableColumn<?, ?> quantidadeColumn;
+
+    @FXML
+    private TableColumn<?, ?> precoColumn;
+
+    @FXML
+    private TableColumn<?, ?> unidadeColumn;
 
     @FXML
     public void initialize() {
-        cadastrarButton.setOnAction(event -> cadastrarIngrediente());
+        // Código de inicialização, como configurar as opções do ComboBox ou as colunas da tabela
+        unidadeMedidaComboBox.getItems().addAll("Kg", "g", "L", "ml", "unidade");
     }
 
-    private void cadastrarIngrediente() {
-        if (validarCampos()) {
-            String nomeIngrediente = nomeIngredienteField.getText();
-            double quantidade = Double.parseDouble(quantidadeField.getText());
-
-            // Lógica para cadastrar o ingrediente
-
-            exibirMensagem("Cadastro de Ingrediente", "Ingrediente cadastrado com sucesso!");
-            limparCampos();
-        }
+    @FXML
+    private void handleSalvar(ActionEvent event) {
+        // Lógica para salvar o ingrediente
+        // Exemplo: validar entrada, criar um novo objeto Ingrediente e salvar em um banco de dados ou lista
     }
 
-    private boolean validarCampos() {
-        if (nomeIngredienteField.getText().isEmpty() || quantidadeField.getText().isEmpty()) {
-            exibirMensagemErro("Todos os campos devem ser preenchidos.");
-            return false;
-        }
-        try {
-            Double.parseDouble(quantidadeField.getText());
-        } catch (NumberFormatException e) {
-            exibirMensagemErro("Quantidade deve ser numérica.");
-            return false;
-        }
-        return true;
+    @FXML
+    private void handleLimpar(ActionEvent event) {
+        // Lógica para limpar os campos de entrada
+        nomeTextField.clear();
+        precoTextField.clear();
+        quantidadeTextField.clear();
+        unidadeMedidaComboBox.getSelectionModel().clearSelection();
     }
 
-    private void limparCampos() {
-        nomeIngredienteField.clear();
-        quantidadeField.clear();
-    }
-
-    private void exibirMensagem(String titulo, String mensagem) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
-
-    private void exibirMensagemErro(String mensagem) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
+    @FXML
+    private void handleExcluir(ActionEvent event) {
+        // Lógica para excluir o ingrediente selecionado na tabela
+        // Exemplo: verificar seleção e remover da lista ou banco de dados
     }
 }

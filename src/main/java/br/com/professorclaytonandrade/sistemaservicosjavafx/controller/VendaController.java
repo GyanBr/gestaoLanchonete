@@ -1,85 +1,66 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-
-import java.time.LocalDate;
+import javafx.event.ActionEvent;
 
 public class VendaController {
 
     @FXML
-    private TextField produtoField;
+    private Label tituloLabel;
 
     @FXML
-    private TextField quantidadeField;
+    private Label dataLabel;
 
     @FXML
-    private TextField valorTotalField;
+    private Label produtoLabel;
 
     @FXML
-    private DatePicker dataVendaPicker;
+    private Label quantidadeLabel;
 
     @FXML
-    private Button registrarButton;
+    private Label precoTotalLabel;
+
+    @FXML
+    private DatePicker dataPicker;
+
+    @FXML
+    private ComboBox<String> produtoComboBox;
+
+    @FXML
+    private TextField quantidadeTextField;
+
+    @FXML
+    private TextField precoTotalTextField;
+
+    @FXML
+    private Button limparButton;
+
+    @FXML
+    private Button salvarButton;
 
     @FXML
     public void initialize() {
-        registrarButton.setOnAction(event -> registrarVenda());
+        // Código de inicialização, como preencher o ComboBox com os produtos disponíveis
+        produtoComboBox.getItems().addAll("Produto 1", "Produto 2", "Produto 3"); // Exemplo de produtos
     }
 
-    private void registrarVenda() {
-        if (validarCampos()) {
-            String produto = produtoField.getText();
-            int quantidade = Integer.parseInt(quantidadeField.getText());
-            double valorTotal = Double.parseDouble(valorTotalField.getText());
-            LocalDate dataVenda = dataVendaPicker.getValue();
-
-            // Adicione a lógica de registro da venda no banco de dados ou em outra estrutura de dados
-
-            exibirMensagem("Registro de Venda", "Venda registrada com sucesso!");
-            limparCampos();
-        }
+    @FXML
+    private void handleSalvar(ActionEvent event) {
+        // Lógica para salvar a venda
+        // Exemplo: validar entrada, calcular o total, criar um novo objeto de venda e salvar em um banco de dados ou lista
     }
 
-    private boolean validarCampos() {
-        if (produtoField.getText().isEmpty() || quantidadeField.getText().isEmpty() || valorTotalField.getText().isEmpty() || dataVendaPicker.getValue() == null) {
-            exibirMensagemErro("Todos os campos devem ser preenchidos.");
-            return false;
-        }
-        try {
-            Integer.parseInt(quantidadeField.getText());
-            Double.parseDouble(valorTotalField.getText());
-        } catch (NumberFormatException e) {
-            exibirMensagemErro("Quantidade e valor total devem ser numéricos.");
-            return false;
-        }
-        return true;
-    }
-
-    private void limparCampos() {
-        produtoField.clear();
-        quantidadeField.clear();
-        valorTotalField.clear();
-        dataVendaPicker.setValue(null);
-    }
-
-    private void exibirMensagem(String titulo, String mensagem) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
-
-    private void exibirMensagemErro(String mensagem) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
+    @FXML
+    private void handleLimpar(ActionEvent event) {
+        // Lógica para limpar os campos de entrada
+        dataPicker.setValue(null);
+        produtoComboBox.getSelectionModel().clearSelection();
+        quantidadeTextField.clear();
+        precoTotalTextField.clear();
     }
 }

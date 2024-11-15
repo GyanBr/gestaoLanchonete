@@ -1,79 +1,72 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
-
-import java.time.LocalDate;
+import javafx.event.ActionEvent;
 
 public class DespesaController {
 
     @FXML
-    private TextField descricaoField;
+    private Label tituloLabel;
 
     @FXML
-    private TextField valorField;
+    private Label descricaoLabel;
 
     @FXML
-    private DatePicker dataDespesaPicker;
+    private Label valorLabel;
 
     @FXML
-    private Button registrarButton;
+    private Label dataLabel;
+
+    @FXML
+    private TextArea descricaoTextArea;
+
+    @FXML
+    private TextField valorTextField;
+
+    @FXML
+    private DatePicker dataPicker;
+
+    @FXML
+    private Button limparButton;
+
+    @FXML
+    private Button salvarButton;
+
+    @FXML
+    private TableView<?> despesasTableView;
+
+    @FXML
+    private TableColumn<?, ?> dataColumn;
+
+    @FXML
+    private TableColumn<?, ?> descricaoColumn;
+
+    @FXML
+    private TableColumn<?, ?> valorColumn;
 
     @FXML
     public void initialize() {
-        registrarButton.setOnAction(event -> registrarDespesa());
+        // Código de inicialização, como vinculação de colunas da tabela se necessário
     }
 
-    private void registrarDespesa() {
-        if (validarCampos()) {
-            String descricao = descricaoField.getText();
-            double valor = Double.parseDouble(valorField.getText());
-            LocalDate data = dataDespesaPicker.getValue();
-
-            // Aqui, pode-se adicionar a lógica de salvar no banco de dados ou registrar em uma lista
-
-            exibirMensagem("Registro de Despesa", "Despesa registrada com sucesso!");
-            limparCampos();
-        }
+    @FXML
+    private void handleSalvar(ActionEvent event) {
+        // Lógica para salvar a despesa
+        // Exemplo: validar entrada, criar um novo objeto Despesa e salvar em um banco de dados ou lista
     }
 
-    private boolean validarCampos() {
-        if (descricaoField.getText().isEmpty() || valorField.getText().isEmpty() || dataDespesaPicker.getValue() == null) {
-            exibirMensagemErro("Todos os campos devem ser preenchidos.");
-            return false;
-        }
-        try {
-            Double.parseDouble(valorField.getText());
-        } catch (NumberFormatException e) {
-            exibirMensagemErro("O campo valor deve ser numérico.");
-            return false;
-        }
-        return true;
-    }
-
-    private void limparCampos() {
-        descricaoField.clear();
-        valorField.clear();
-        dataDespesaPicker.setValue(null);
-    }
-
-    private void exibirMensagem(String titulo, String mensagem) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
-    }
-
-    private void exibirMensagemErro(String mensagem) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Erro");
-        alert.setHeaderText(null);
-        alert.setContentText(mensagem);
-        alert.showAndWait();
+    @FXML
+    private void handleLimpar(ActionEvent event) {
+        // Lógica para limpar os campos de entrada
+        descricaoTextArea.clear();
+        valorTextField.clear();
+        dataPicker.setValue(null);
     }
 }

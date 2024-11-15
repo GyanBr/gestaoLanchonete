@@ -15,7 +15,7 @@
     <children>
         <VBox layoutX="14.0" layoutY="14.0" prefHeight="572.0" prefWidth="772.0" spacing="10.0">
             <children>
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gerenciamento de Produtos">
+                <Label fx:id="tituloLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Gerenciamento de Produtos">
                     <VBox.margin>
                         <Insets bottom="10.0" />
                     </VBox.margin>
@@ -24,12 +24,12 @@
                 <HBox spacing="10.0">
                     <children>
                         <VBox spacing="5.0">
-                            <Label text="Descrição:" />
+                            <Label fx:id="descricaoLabel" text="Descrição:" />
                             <TextField fx:id="descricaoField" prefWidth="300.0" />
                         </VBox>
 
                         <VBox spacing="5.0">
-                            <Label text="Preço:" />
+                            <Label fx:id="precoLabel" text="Preço:" />
                             <TextField fx:id="precoField" prefWidth="150.0" />
                         </VBox>
                     </children>
@@ -38,12 +38,12 @@
                 <HBox spacing="10.0">
                     <children>
                         <VBox spacing="5.0">
-                            <Label text="Quantidade em Estoque:" />
+                            <Label fx:id="quantidadeLabel" text="Quantidade em Estoque:" />
                             <TextField fx:id="quantidadeField" prefWidth="150.0" />
                         </VBox>
 
                         <VBox spacing="5.0">
-                            <Label text="Markup (%):" />
+                            <Label fx:id="markupLabel" text="Markup (%):" />
                             <TextField fx:id="markupField" prefWidth="150.0" />
                         </VBox>
                     </children>

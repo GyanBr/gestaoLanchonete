@@ -16,23 +16,23 @@
     <children>
         <VBox layoutX="14.0" layoutY="14.0" prefHeight="472.0" prefWidth="572.0" spacing="10.0">
             <children>
-                <Label text="Cadastro de Ingredientes" style="-fx-font-size: 18px; -fx-font-weight: bold">
+                <Label fx:id="tituloLabel" text="Cadastro de Ingredientes" style="-fx-font-size: 18px; -fx-font-weight: bold">
                     <VBox.margin>
                         <Insets bottom="10.0" />
                     </VBox.margin>
                 </Label>
 
                 <VBox spacing="10.0">
-                    <Label text="Nome:" />
+                    <Label fx:id="nomeLabel" text="Nome:" />
                     <TextField fx:id="nomeTextField" />
 
-                    <Label text="Preço:" />
+                    <Label fx:id="precoLabel" text="Preço:" />
                     <TextField fx:id="precoTextField" />
 
-                    <Label text="Quantidade:" />
+                    <Label fx:id="quantidadeLabel" text="Quantidade:" />
                     <TextField fx:id="quantidadeTextField" />
 
-                    <Label text="Unidade de Medida:" />
+                    <Label fx:id="unidadeLabel" text="Unidade de Medida:" />
                     <ComboBox fx:id="unidadeMedidaComboBox" prefWidth="150.0" />
                 </VBox>
 
