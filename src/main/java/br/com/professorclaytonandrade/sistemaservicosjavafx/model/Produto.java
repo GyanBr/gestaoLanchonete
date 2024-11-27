@@ -1,28 +1,101 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.model;
+import javafx.beans.property.*;
 
 public class Produto {
-    private int id;
-    private String nome;
-    private double preco;
+    private final IntegerProperty id = new SimpleIntegerProperty();
+    private final StringProperty descricao = new SimpleStringProperty();
+    private final DoubleProperty preco = new SimpleDoubleProperty();
+    private final IntegerProperty quantidadeEstoque = new SimpleIntegerProperty();
+    private final DoubleProperty markup = new SimpleDoubleProperty();
 
-    public Produto(int id, String nome, double preco) {
-        this.id = id;
-        this.nome = nome;
-        this.preco = preco;
+    // Construtores
+    public Produto() {}
+
+    public Produto(String descricao, double preco, int quantidadeEstoque, double markup) {
+        setDescricao(descricao);
+        setPreco(preco);
+        setQuantidadeEstoque(quantidadeEstoque);
+        setMarkup(markup);
     }
 
-    public Produto(String nome, double preco) {
-        this.nome = nome;
-        this.preco = preco;
+    public Produto(int id, String descricao, double preco, int quantidadeEstoque, double markup) {
+        setId(id);
+        setDescricao(descricao);
+        setPreco(preco);
+        setQuantidadeEstoque(quantidadeEstoque);
+        setMarkup(markup);
     }
 
     // Getters e Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id.get();
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setId(int id) {
+        this.id.set(id);
+    }
 
-    public double getPreco() { return preco; }
-    public void setPreco(double preco) { this.preco = preco; }
+    public String getDescricao() {
+        return descricao.get();
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao.set(descricao);
+    }
+
+    public double getPreco() {
+        return preco.get();
+    }
+
+    public void setPreco(double preco) {
+        this.preco.set(preco);
+    }
+
+    public int getQuantidadeEstoque() {
+        return quantidadeEstoque.get();
+    }
+
+    public void setQuantidadeEstoque(int quantidadeEstoque) {
+        this.quantidadeEstoque.set(quantidadeEstoque);
+    }
+
+    public double getMarkup() {
+        return markup.get();
+    }
+
+    public void setMarkup(double markup) {
+        this.markup.set(markup);
+    }
+
+    // Métodos Property para binding
+    public IntegerProperty idProperty() {
+        return id;
+    }
+
+    public StringProperty descricaoProperty() {
+        return descricao;
+    }
+
+    public DoubleProperty precoProperty() {
+        return preco;
+    }
+
+    public IntegerProperty quantidadeEstoqueProperty() {
+        return quantidadeEstoque;
+    }
+
+    public DoubleProperty markupProperty() {
+        return markup;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + getId() +
+                ", descricao='" + getDescricao() + '\'' +
+                ", preco=" + getPreco() +
+                ", quantidadeEstoque=" + getQuantidadeEstoque() +
+                ", markup=" + getMarkup() +
+                '}';
+    }
 }
