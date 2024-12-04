@@ -3,40 +3,32 @@ package br.com.professorclaytonandrade.sistemaservicosjavafx.controller;
 import br.com.professorclaytonandrade.sistemaservicosjavafx.config.conexao.FabricaDeConexao;
 import br.com.professorclaytonandrade.sistemaservicosjavafx.dao.IngredienteDAO;
 import br.com.professorclaytonandrade.sistemaservicosjavafx.model.Ingrediente;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class IngredienteController {
 
-    @FXML
-    private TextField nomeTextField;
-    @FXML
-    private TextField precoTextField;
-    @FXML
-    private TextField quantidadeTextField;
-    @FXML
-    private ComboBox<String> unidadeMedidaComboBox;
-    @FXML
-    private TableView<Ingrediente> ingredientesTableView;
-    @FXML
-    private TableColumn<Ingrediente, Integer> idColumn;
-    @FXML
-    private TableColumn<Ingrediente, String> nomeColumn;
-    @FXML
-    private TableColumn<Ingrediente, Double> quantidadeColumn;
-    @FXML
-    private TableColumn<Ingrediente, Double> precoColumn;
-    @FXML
-    private TableColumn<Ingrediente, String> unidadeColumn;
+    @FXML private TextField nomeTextField;
+    @FXML private TextField precoTextField;
+    @FXML private TextField quantidadeTextField;
+    @FXML private ComboBox<String> unidadeMedidaComboBox;
+    @FXML private TableView<Ingrediente> ingredientesTableView;
+    @FXML private TableColumn<Ingrediente, Integer> idColumn;
+    @FXML private TableColumn<Ingrediente, String> nomeColumn;
+    @FXML private TableColumn<Ingrediente, Double> quantidadeColumn;
+    @FXML private TableColumn<Ingrediente, Double> precoColumn;
+    @FXML private TableColumn<Ingrediente, String> unidadeColumn;
 
     private IngredienteDAO ingredienteDAO;
     private Connection conexao;
+    private Ingrediente ingredienteSelecionado;
 
     @FXML
     public void initialize() {
@@ -47,6 +39,7 @@ public class IngredienteController {
             configurarColunas();
             configurarComboBox();
             configurarSelecaoTabela();
+            configurarCamposNumericos();
             atualizarTabela();
 
         } catch (SQLException e) {
@@ -56,10 +49,34 @@ public class IngredienteController {
 
     private void configurarColunas() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nomeColumn.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        quantidadeColumn.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
-        precoColumn.setCellValueFactory(new PropertyValueFactory<>("preco"));
-        unidadeColumn.setCellValueFactory(new PropertyValueFactory<>("unidadeMedida"));
+        nomeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNome()));
+        quantidadeColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getQuantidade()).asObject());
+        precoColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPreco()).asObject());
+        unidadeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUnidadeMedida()));
+
+        precoColumn.setCellFactory(tc -> new TableCell<Ingrediente, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty || price == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("R$ %.2f", price));
+                }
+            }
+        });
+
+        quantidadeColumn.setCellFactory(tc -> new TableCell<Ingrediente, Double>() {
+            @Override
+            protected void updateItem(Double quantity, boolean empty) {
+                super.updateItem(quantity, empty);
+                if (empty || quantity == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", quantity));
+                }
+            }
+        });
     }
 
     private void configurarComboBox() {
@@ -68,9 +85,24 @@ public class IngredienteController {
         ));
     }
 
+    private void configurarCamposNumericos() {
+        precoTextField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\.?\\d*")) {
+                precoTextField.setText(oldValue);
+            }
+        });
+
+        quantidadeTextField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*\\.?\\d*")) {
+                quantidadeTextField.setText(oldValue);
+            }
+        });
+    }
+
     private void configurarSelecaoTabela() {
         ingredientesTableView.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSelection, newSelection) -> {
+                    ingredienteSelecionado = newSelection;
                     if (newSelection != null) {
                         preencherCampos(newSelection);
                     }
@@ -83,35 +115,39 @@ public class IngredienteController {
             if (!validarCampos()) return;
 
             Ingrediente ingrediente = criarIngrediente();
-            ingredienteDAO.inserir(ingrediente);
+            if (ingredienteSelecionado != null) {
+                ingrediente.setId(ingredienteSelecionado.getId());
+                ingredienteDAO.atualizar(ingrediente);
+            } else {
+                ingredienteDAO.inserir(ingrediente);
+            }
 
             atualizarTabela();
-            limparCampos();
-            mostrarSucesso("Ingrediente salvo com sucesso!");
+            limparSelecao();
+            mostrarSucesso("Ingrediente " + (ingredienteSelecionado != null ? "atualizado" : "salvo") + " com sucesso!");
 
-        } catch (SQLException | NumberFormatException e) {
+        } catch (SQLException e) {
             mostrarErro("Erro ao salvar", e.getMessage());
         }
     }
 
     @FXML
     private void handleExcluir() {
-        Ingrediente selecionado = ingredientesTableView.getSelectionModel().getSelectedItem();
-        if (selecionado == null) {
+        if (ingredienteSelecionado == null) {
             mostrarAlerta("Selecione um ingrediente para excluir.");
             return;
         }
 
         Optional<ButtonType> resultado = mostrarConfirmacao(
                 "Confirmar exclusão",
-                "Deseja realmente excluir o ingrediente " + selecionado.getNome() + "?"
+                "Deseja realmente excluir o ingrediente " + ingredienteSelecionado.getNome() + "?"
         );
 
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             try {
-                ingredienteDAO.deletar(selecionado.getId());
+                ingredienteDAO.deletar(ingredienteSelecionado.getId());
                 atualizarTabela();
-                limparCampos();
+                limparSelecao();
                 mostrarSucesso("Ingrediente excluído com sucesso!");
             } catch (SQLException e) {
                 mostrarErro("Erro ao excluir", e.getMessage());
@@ -121,8 +157,7 @@ public class IngredienteController {
 
     @FXML
     private void handleLimpar() {
-        limparCampos();
-        ingredientesTableView.getSelectionModel().clearSelection();
+        limparSelecao();
     }
 
     private boolean validarCampos() {
@@ -132,8 +167,17 @@ public class IngredienteController {
         }
 
         try {
-            Double.parseDouble(precoTextField.getText().trim());
-            Double.parseDouble(quantidadeTextField.getText().trim());
+            double preco = Double.parseDouble(precoTextField.getText().trim());
+            double quantidade = Double.parseDouble(quantidadeTextField.getText().trim());
+
+            if (preco <= 0) {
+                mostrarAlerta("O preço deve ser maior que zero.");
+                return false;
+            }
+            if (quantidade <= 0) {
+                mostrarAlerta("A quantidade deve ser maior que zero.");
+                return false;
+            }
         } catch (NumberFormatException e) {
             mostrarAlerta("Preço e quantidade devem ser números válidos.");
             return false;
@@ -168,6 +212,12 @@ public class IngredienteController {
         precoTextField.clear();
         quantidadeTextField.clear();
         unidadeMedidaComboBox.setValue(null);
+    }
+
+    private void limparSelecao() {
+        ingredienteSelecionado = null;
+        limparCampos();
+        ingredientesTableView.getSelectionModel().clearSelection();
     }
 
     private void atualizarTabela() throws SQLException {

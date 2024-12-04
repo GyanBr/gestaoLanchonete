@@ -1,36 +1,38 @@
 package br.com.professorclaytonandrade.sistemaservicosjavafx.model;
 
+import javafx.beans.property.*;
 import java.time.LocalDate;
 
 public class Despesa {
-    private int id;
-    private String descricao;
-    private double valor;
-    private LocalDate data;
-
-    public Despesa(int id, String descricao, double valor, LocalDate data) {
-        this.id = id;
-        this.descricao = descricao;
-        this.valor = valor;
-        this.data = data;
-    }
+    private final IntegerProperty id = new SimpleIntegerProperty();
+    private final StringProperty descricao = new SimpleStringProperty();
+    private final DoubleProperty valor = new SimpleDoubleProperty();
+    private final ObjectProperty<LocalDate> data = new SimpleObjectProperty<>();
 
     public Despesa(String descricao, double valor, LocalDate data) {
-        this.descricao = descricao;
-        this.valor = valor;
-        this.data = data;
+        setDescricao(descricao);
+        setValor(valor);
+        setData(data);
     }
 
-    // Getters e Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public Despesa(int id, String descricao, double valor, LocalDate data) {
+        this(descricao, valor, data);
+        setId(id);
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public int getId() { return id.get(); }
+    public void setId(int id) { this.id.set(id); }
+    public IntegerProperty idProperty() { return id; }
 
-    public double getValor() { return valor; }
-    public void setValor(double valor) { this.valor = valor; }
+    public String getDescricao() { return descricao.get(); }
+    public void setDescricao(String descricao) { this.descricao.set(descricao); }
+    public StringProperty descricaoProperty() { return descricao; }
 
-    public LocalDate getData() { return data; }
-    public void setData(LocalDate data) { this.data = data; }
+    public double getValor() { return valor.get(); }
+    public void setValor(double valor) { this.valor.set(valor); }
+    public DoubleProperty valorProperty() { return valor; }
+
+    public LocalDate getData() { return data.get(); }
+    public void setData(LocalDate data) { this.data.set(data); }
+    public ObjectProperty<LocalDate> dataProperty() { return data; }
 }

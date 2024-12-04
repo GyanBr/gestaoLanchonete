@@ -43,6 +43,10 @@
         <HBox spacing="10.0" alignment="CENTER_RIGHT">
           <children>
             <Button fx:id="limparButton" text="Limpar" onAction="#handleLimpar" />
+
+            <Button fx:id="excluirButton" text="Excluir" onAction="#handleExcluir"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+
             <Button fx:id="salvarButton" text="Salvar" onAction="#handleSalvar" defaultButton="true"
                     style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
           </children>
