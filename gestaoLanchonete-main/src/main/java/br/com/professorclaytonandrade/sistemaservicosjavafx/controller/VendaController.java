@@ -52,7 +52,6 @@ public class VendaController {
         }
     }
 
-
     private void configurarColunas() {
         dataColumn.setCellValueFactory(cellData -> cellData.getValue().dataProperty());
         produtoColumn.setCellValueFactory(cellData -> cellData.getValue().produtoDescricaoProperty());
@@ -63,7 +62,11 @@ public class VendaController {
             @Override
             protected void updateItem(Double valor, boolean empty) {
                 super.updateItem(valor, empty);
-                setText(empty ? null : String.format("R$ %.2f", valor));
+                if (empty || valor == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("R$ %.2f", valor).replace(".", ","));
+                }
             }
         });
     }
@@ -88,12 +91,15 @@ public class VendaController {
     }
 
     private void configurarCamposNumericos() {
-        quantidadeTextField.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                quantidadeTextField.setText(newValue.replaceAll("[^\\d]", ""));
+        TextFormatter<String> quantidadeFormatter = new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("\\d*")) {
+                return change;
             }
-            calcularTotal();
+            return null;
         });
+        quantidadeTextField.setTextFormatter(quantidadeFormatter);
+        quantidadeTextField.textProperty().addListener((obs, oldValue, newValue) -> calcularTotal());
 
         precoTotalTextField.setEditable(false);
     }
@@ -118,7 +124,7 @@ public class VendaController {
             try {
                 int quantidade = Integer.parseInt(quantidadeTextField.getText());
                 double total = produtoSelecionado.getPrecoVenda() * quantidade;
-                precoTotalTextField.setText(String.format("%.2f", total));
+                precoTotalTextField.setText(String.format("%.2f", total).replace(".", ","));
             } catch (NumberFormatException e) {
                 precoTotalTextField.clear();
             }
@@ -146,6 +152,26 @@ public class VendaController {
         } catch (SQLException e) {
             mostrarErro("Erro ao salvar", e.getMessage());
         }
+    }
+
+    private Venda criarVenda() {
+        Produto produto = produtoComboBox.getValue();
+        String valorTexto = precoTotalTextField.getText().trim().replace("R$", "").replace(" ", "");
+        double valorTotal;
+        try {
+            valorTotal = Double.parseDouble(valorTexto.replace(",", "."));
+        } catch (NumberFormatException e) {
+            mostrarErro("Erro de Formato", "Valor total inválido");
+            throw e;
+        }
+
+        return new Venda(
+                produto.getId(),
+                produto.getDescricao(),
+                Integer.parseInt(quantidadeTextField.getText().trim()),
+                valorTotal,
+                dataPicker.getValue()
+        );
     }
 
     @FXML
@@ -224,17 +250,6 @@ public class VendaController {
         return true;
     }
 
-    private Venda criarVenda() {
-        Produto produto = produtoComboBox.getValue();
-        return new Venda(
-                produto.getId(),
-                produto.getDescricao(),
-                Integer.parseInt(quantidadeTextField.getText().trim()),
-                Double.parseDouble(precoTotalTextField.getText().trim()),
-                dataPicker.getValue()
-        );
-    }
-
     private void preencherCampos(Venda venda) {
         dataPicker.setValue(venda.getData());
         try {
@@ -244,7 +259,7 @@ public class VendaController {
             mostrarErro("Erro ao carregar produto", e.getMessage());
         }
         quantidadeTextField.setText(String.valueOf(venda.getQuantidade()));
-        precoTotalTextField.setText(String.format("%.2f", venda.getValorTotal()));
+        precoTotalTextField.setText(String.format("%.2f", venda.getValorTotal()).replace(".", ","));
     }
 
     private void limparCampos() {
